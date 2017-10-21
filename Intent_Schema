@@ -1,0 +1,13 @@
+{
+  "intents": [
+    {
+      "intent": "YesIntent"
+    },
+    {
+      "intent": "NoIntent"
+    },
+    {
+      "intent": "AccountIntent"
+    }
+  ]
+}
