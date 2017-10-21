@@ -33,11 +33,15 @@ steps:
   location_input:
     reprompt:
       - "Sorry, I didn't understand. \
-      For nearest branch location, please say. Find me the nearest bank"
+      For nearest branch location, please say. Find me the nearest bank. \
+      For the number of branches near you. \
+      say: how many banks are around"
     help:
-      - "say: find me the nearest bank"
+      - "say: find me the nearest bank or. how many banks are around."
     events:
       nearest_branch:
+        next: done
+      num_branches_nearby:
         next: done
 
   pin_check:

@@ -53,37 +53,22 @@ def help_user():
     # context_help string could be extended with some dynamic information
     return question(context_help)
 
-
+#start module after calling skill
 @ask.launch
-def start():
-    welcome_message = 'Hello there, Welcome to the HSBC Alexa App. \
-    How can I help.'
-    return question(welcome_message)
-  
 @sup.guide
 def launched():
     return question(render_template("welcome"))
 
-
+#select branch module
 @ask.intent("SelectBranchModule")
 @sup.guide
 def BranchSelected():
 	return question(render_template("branch_welcome"))
 
 
-
-@ask.intent("CheckBalance")
-def last_transaction():
-	return statement("Your balance is $120.00.")
-
-
-@ask.intent("LastTransaction")
-def last_transaction():
-	return statement("Your last transaction was $3.95 at Starbucks on Saturday mornning.")
-
-
+#number of nearby branches
 @ask.intent("BranchesNearby")
-def branches_nearby():
+def num_branches_nearby():
 	geolocator = Nominatim()
 	location = geolocator.geocode("School of Computing, Leeds")
 
@@ -93,35 +78,7 @@ def branches_nearby():
 	count = myfile.count("GeographicLocation")
 	return statement("There are %s branches within a mile." %count)
 
-
-@ask.intent("SelectBalanceModule")
-@sup.guide
-def BalanceSelected():
-	user = Person()
-
-	session.attributes["PinPosition"] = randint(0, len(user.pin)-1)
-	positionToMsg = nth[session.attributes["PinPosition"]]
-
-
-	return question("Please say the " + positionToMsg + " number of your pin.")
-
-@ask.intent("InputPin", convert={"PinNum":int})
-@sup.guide
-def PinCheck(PinNum):
-	if PinNum not in [0,1,2,3,4,5,6,7,8,9]:
-		return sup.reprompt_error()
-
-	user = Person()
-	correctPin = user.pin[session.attributes["PinPosition"]]
-
-	if (PinNum == int(correctPin)):
-		return statement("pin correct. Logging in")
-	else:
-		return statement("Pin incorrect. returning to module selection")
-
-
-
-# @app.route('/test')
+#nearest branch
 @ask.intent('NearestLocation')
 @sup.guide
 def nearest_branch():
@@ -175,6 +132,36 @@ def nearest_branch():
 	The store hours for today are %s to %s " %(miles, address, opentime, closingtime)
 
 	return statement(msg)
+
+
+@ask.intent("SelectBalanceModule")
+@sup.guide
+def BalanceSelected():
+	user = Person()
+
+	session.attributes["PinPosition"] = randint(0, len(user.pin)-1)
+	positionToMsg = nth[session.attributes["PinPosition"]]
+
+
+	return question("Please say the " + positionToMsg + " number of your pin.")
+
+@ask.intent("InputPin", convert={"PinNum":int})
+@sup.guide
+def PinCheck(PinNum):
+	if PinNum not in [0,1,2,3,4,5,6,7,8,9]:
+		return sup.reprompt_error()
+
+	user = Person()
+	correctPin = user.pin[session.attributes["PinPosition"]]
+
+	if (PinNum == int(correctPin)):
+		return statement("pin correct. Logging in")
+	else:
+		return statement("Pin incorrect. returning to module selection")
+
+
+
+
 
 
 
