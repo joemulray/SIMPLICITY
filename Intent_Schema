@@ -1,26 +1,25 @@
 {
   "intents": [
     {
-      "intent": "YesIntent"
+      "intent": "AMAZON.HelpIntent"
     },
     {
-      "intent": "NoIntent"
-    },
-    {
-      "intent": "AccountIntent"
-    },
-    {
-      "intent": "PasswordLetterIntent",
-      "slots": [{
-        "name": "myNum",
-        "type": "AMAZON.NUMBER"
-      }]
-    },
-    {
-      "intent": "LastTransaction"
+      "intent": "SelectBranchModule"
     },
     {
       "intent": "NearestLocation"
+    },
+    {
+      "intent": "SelectBalanceModule"
+    },
+    {
+      "intent": "InputPin",
+      "slots": [
+        {
+          "name": "PinNum",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
     }
   ]
 }

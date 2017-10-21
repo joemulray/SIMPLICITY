@@ -47,8 +47,8 @@ def launched():
 
 @ask.intent("SelectBranchModule")
 @sup.guide
-def BrachSelected():
-	return statement("your branch is here. returning to the start")
+def BranchSelected():
+	return question(render_template("branch_welcome"))
 
 
 
