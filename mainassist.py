@@ -14,7 +14,7 @@ def homepage():
 @ask.launch
 def start():
     welcome_message = 'Hello there, Welcome to the HSBC Alexa App. \
-    Would you like to hear your balance.'
+    What can we help you with?'
     return question(welcome_message)
 
 @ask.intent("YesIntent")
@@ -32,14 +32,10 @@ def last_transaction():
 
 
 @ask.intent("PasswordIntent")
-
 def passwordCheck():
-
 	user = Person()
 	password = user.passwd
-
 	pwLength = len(password)
-
 	return question("your password is" + password)
 
 
@@ -47,8 +43,13 @@ def passwordCheck():
 def numbers(myNum):
 	return statement("number is {}".format(myNum))
 
-#Add ability to query last months bills
 
+@ask.intent('AccountBalance')
+def balance():
+	return statement("Your Account balance is ${}".format(Person().balance))
+
+
+#Add ability to query last months bills
 
 #Class for information about user if needed
 class Person:
@@ -58,6 +59,7 @@ class Person:
 		self.bankid = "12345"
 		self.passwd = "password123"
 		self.securityq = "December"
+		self.balance = 124000
 
 
 if __name__ == '__main__':
