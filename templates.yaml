@@ -1,7 +1,7 @@
 
 welcome: "Hello there, Welcome to the HSBC Alexa App. \
-To find a branch, say branch. \
-To view your balance, say balance."
+To view your balance, say. my balance. \
+To find the nearest branch, say. find me the nearest bank. \
+To find the nearest atm, say. I need an ATM. \
+for how many branches are nearby, say. how many branches are around."
 
-branch_welcome: "Welcome to branch location module. for the nearest branch location, please say. Find me the nearest bank. \
-for the number of branch near you, say. how many banks are around."
