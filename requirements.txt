@@ -2,4 +2,6 @@ requests
 flask
 flask_ask
 unidecode
+afg
 geopy
+
