@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template
+
+from flask import Flask, render_template, jsonify
 from flask_ask import Ask, statement, question , session, convert_errors
+import requests
+from geopy.geocoders import Nominatim
+import geopy.distance
+import datetime
 from afg import Supervisor
 from random import randint
 
-app =Flask("Login")
+app =Flask("Bank")
+
+
 ask = Ask(app, "/")
 sup = Supervisor("scenario.yaml")
 
@@ -45,6 +52,7 @@ def BrachSelected():
 
 
 
+
 @ask.intent("SelectBalanceModule")
 @sup.guide
 def BalanceSelected():
@@ -69,7 +77,6 @@ def PinCheck(PinNum):
 	else:
 		return statement("Pin incorrect. returning to module selection")
 
-#Add ability to query last months bills
 
 #dictionary for converting number to messages
 #need to decide max pin length
@@ -80,16 +87,66 @@ nth = {
 	3: "fourth"
 }
 
-@ask.intent("YesIntent")
-@sup.guide
-def yes_intent():
-	return statement("Your balance is $120.00")
 
-@ask.intent("NoIntent")
-@sup.guide
-def no_intent():
-	return statement("I'm sorry to hear that.")
 
+# @app.route('/test')
+@ask.intent('NearestLocation')
+@sup.guide
+def nearest_branch():
+	
+	geolocator = Nominatim()
+	location = geolocator.geocode(Person().address)
+	
+	userlong = location.longitude
+	userlat = location.latitude
+
+	url = "https://api.hsbc.com/x-open-banking/v1.2/branches/geo-location/lat/%s/long/%s" %(userlat, userlong)
+
+	respc = requests.get(url)
+	smallest = []
+	response = respc.json()
+
+	if not response:
+		return statement("Sorry, I could not find any stores near your address")
+
+	for store in response:
+		storelat = store['GeographicLocation']['Latitude']
+		storelong = store['GeographicLocation']['Longitude']
+
+		distance = geopy.distance.vincenty((userlat, userlong), (storelat,storelong))
+		smallest.append(distance)
+
+	pos = smallest.index(min(smallest))
+
+	miles = smallest[pos].miles
+	objadd = response[pos]["Address"]
+
+	address = "%s %s %s, %s" %(objadd["BuildingNumberOrName"], objadd["StreetName"], \
+	 objadd["TownName"], objadd["PostCode"])
+
+	weekday = datetime.datetime.now().strftime("%A")
+	hours = response[pos]["OpeningTimes"]
+
+	opentime = '0AM'
+	closingtime = '0AM'
+
+	for hour in hours:
+		if str(hour["OpeningDay"]) == str(weekday):
+			opentime = hour["OpeningTime"]
+			closingtime = hour["ClosingTime"]
+
+
+	opentime = opentime[:-8]
+	closingtime = closingtime[:-8]
+	
+	msg = "Based on your location the closest store is %.2f miles away. The address is %s. \
+	The store hours for today are %s to %s " %(miles, address, opentime, closingtime)
+
+	return statement(msg)
+
+
+
+#Add ability to query last months bills
 #Class for information about user if needed
 class Person:
 	def __init__(self):
@@ -98,7 +155,13 @@ class Person:
 		self.bankid = "12345"
 		self.passwd = "password123"
 		self.securityq = "December"
+
 		self.pin = "1234"
+
+		self.balance = 124000
+		self.postcode = "LS13EY"
+		self.address = "Calverley St, Leeds"
+
 
 
 if __name__ == '__main__':
