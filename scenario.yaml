@@ -1,0 +1,44 @@
+# start and finish steps in scenario
+first_step: init
+last_step: done
+default_help:
+  - "To find a branch, say branch. \
+    To view your balance, say balance."
+
+
+steps:
+  # minimal description for the first step
+  init:
+    events:
+      launched:
+        next: choose_module
+
+  # step name
+  choose_module:
+    # if wrong intent was invoked, ask user again with one of the phrases (random choice)
+    reprompt:
+      - "Sorry, I didn't understand. \
+      To find a branch, say branch. \
+      To view your balance, say balance"
+    # help phrases for the current step
+    help:
+      - "say: branch or balance"
+    events:
+    #choose path based on function triggered from intent
+      BranchSelected:
+        next: done
+      BalanceSelected:
+        next: pin_check
+
+  pin_check:
+    reprompt:
+      - "Sorry, I didn't understand. please say a number."
+    help:
+      - "Say a number"
+
+    events:
+      PinCheck:
+        next: done
+
+# no need to describe last step
+  done:

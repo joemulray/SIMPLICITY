@@ -24,6 +24,9 @@
     },
     {
       "intent": "BranchesNearby"
+    },
+    {
+      "intent": "NearestLocation"
     }
   ]
 }
