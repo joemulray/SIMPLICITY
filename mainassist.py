@@ -9,10 +9,14 @@ import geopy.distance
 import datetime
 from afg import Supervisor
 from random import randint
+import urllib
+
 
 app =Flask("Bank")
 
 
+
+app =Flask(__name__)
 ask = Ask(app, "/")
 sup = Supervisor("scenario.yaml")
 
@@ -40,6 +44,11 @@ def help_user():
 
 
 @ask.launch
+def start():
+    welcome_message = 'Hello there, Welcome to the HSBC Alexa App. \
+    How can I help.'
+    return question(welcome_message)
+  
 @sup.guide
 def launched():
     return question(render_template("welcome"))
@@ -52,6 +61,39 @@ def BrachSelected():
 
 
 
+@ask.intent("CheckBalance")
+def last_transaction():
+	return statement("Your balance is $120.00.")
+
+
+@ask.intent("LastTransaction")
+def last_transaction():
+	return statement("Your last transaction was $3.95 at Starbucks on Saturday mornning.")
+
+
+
+
+
+
+geolocator = Nominatim()
+location = geolocator.geocode("School of Computing, Leeds")
+
+link = "https://api.hsbc.com/x-open-banking/v1.2/branches/geo-location/lat/53.8054848/long/-1.5534523?radius=1"
+f = urllib.urlopen(link)
+myfile = f.read()
+
+count = myfile.count("GeographicLocation")
+
+
+
+@ask.intent("BranchesNearby")
+def branches_nearby():
+	return statement("There are %s branches within a mile." %count)
+
+
+
+
+
 
 @ask.intent("SelectBalanceModule")
 @sup.guide
@@ -60,6 +102,7 @@ def BalanceSelected():
 
 	session.attributes["PinPosition"] = randint(0, len(user.pin)-1)
 	positionToMsg = nth[session.attributes["PinPosition"]]
+
 
 	return question("Please say the " + positionToMsg + " number of your pin.")
 

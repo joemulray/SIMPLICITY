@@ -20,6 +20,12 @@
       "intent": "LastTransaction"
     },
     {
+      "intent": "CheckBalance"
+    },
+    {
+      "intent": "BranchesNearby"
+    },
+    {
       "intent": "NearestLocation"
     }
   ]
