@@ -20,6 +20,17 @@ app =Flask(__name__)
 ask = Ask(app, "/")
 sup = Supervisor("scenario.yaml")
 
+
+#dictionary for converting number to messages
+#need to decide max pin length
+nth = {
+	0: "first",
+	1: "second",
+	2: "third",
+	3: "fourth"
+}
+
+
 @ask.on_session_started
 @sup.start
 def new_session():
@@ -71,28 +82,16 @@ def last_transaction():
 	return statement("Your last transaction was $3.95 at Starbucks on Saturday mornning.")
 
 
-
-
-
-
-geolocator = Nominatim()
-location = geolocator.geocode("School of Computing, Leeds")
-
-link = "https://api.hsbc.com/x-open-banking/v1.2/branches/geo-location/lat/53.8054848/long/-1.5534523?radius=1"
-f = urllib.urlopen(link)
-myfile = f.read()
-
-count = myfile.count("GeographicLocation")
-
-
-
 @ask.intent("BranchesNearby")
 def branches_nearby():
+	geolocator = Nominatim()
+	location = geolocator.geocode("School of Computing, Leeds")
+
+	link = "https://api.hsbc.com/x-open-banking/v1.2/branches/geo-location/lat/53.8054848/long/-1.5534523?radius=1"
+	f = urllib.urlopen(link)
+	myfile = f.read()
+	count = myfile.count("GeographicLocation")
 	return statement("There are %s branches within a mile." %count)
-
-
-
-
 
 
 @ask.intent("SelectBalanceModule")
@@ -119,16 +118,6 @@ def PinCheck(PinNum):
 		return statement("pin correct. Logging in")
 	else:
 		return statement("Pin incorrect. returning to module selection")
-
-
-#dictionary for converting number to messages
-#need to decide max pin length
-nth = {
-	0: "first",
-	1: "second",
-	2: "third",
-	3: "fourth"
-}
 
 
 
