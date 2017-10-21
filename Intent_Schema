@@ -18,6 +18,12 @@
     },
     {
       "intent": "LastTransaction"
+    },
+    {
+      "intent": "CheckBalance"
+    },
+    {
+      "intent": "BranchesNearby"
     }
   ]
 }

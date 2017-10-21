@@ -1,12 +1,32 @@
 YesIntent yes
 YesIntent sure
 YesIntent yeah
+YesIntent please
+
 NoIntent no
 NoIntent no thank you
+NoIntent no thanks
+NoIntent nope
+
 AccountIntent what is my account number 
+AccountIntent what are my account details
+AccountIntent account details
 AccountIntent account number
+AccountIntent my account number
 AccountIntent what is my account
 
 LastTransaction what was my last transaction
 LastTransaction what was my last spending
 LastTransaction what was my last purchase
+
+CheckBalance what is my balance
+CheckBalance what is my current balance
+CheckBalance how much money do I have in my account
+CheckBalance how much money do I have in my bank account
+CheckBalance how much money do I have
+CheckBalance am I rich
+
+BranchesNearby how many branches are around
+BranchesNearby how many banks are around
+BranchesNearby are there any banks nearby
+BranchesNearby are there any branches nearby
