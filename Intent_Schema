@@ -26,6 +26,23 @@
     },
     {
       "intent" : "NearestATM"
+    },
+    {
+      "intent" : "TransferIntent",
+      "slots" : [
+        {
+          "name": "accountone",
+          "type": "ACCOUNT"
+        },
+        {
+          "name": "accounttwo",
+          "type": "ACCOUNT"
+        },
+        {
+          "name": "amount",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
     }
   ]
 }

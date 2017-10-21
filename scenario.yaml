@@ -43,6 +43,17 @@ steps:
 
     events:
       PinCheck:
+        next: transfer
+
+
+  transfer:
+    reprompt:
+      - "Sorry I could not find the account, please try again."
+    help:
+      - "Say an account"
+
+    events:
+      transfer_internal:
         next: done
 
 # no need to describe last step

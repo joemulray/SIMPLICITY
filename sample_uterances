@@ -17,3 +17,5 @@ NearestATM find me the nearest ATM
 NearestATM find me a ATM near me
 NearestATM where is the nearest ATM
 NearestATM I need to go to the ATM
+
+TransferIntent Transfer {amount} from {accountone} to {accounttwo}

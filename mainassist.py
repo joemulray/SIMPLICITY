@@ -195,15 +195,41 @@ def PinCheck(PinNum):
 	correctPin = user.pin[session.attributes["PinPosition"]]
 
 	if (PinNum == int(correctPin)):
-		return statement("pin correct. Logging in")
+		return question("pin correct. Logging in. Please say your transfer. ")
 	else:
 		return statement("Pin incorrect. returning to module selection")
 
 
+@ask.intent("TransferIntent", convert={"amount":int, "accountone": "ACCOUNT", "accounttwo": "ACCOUNT"})
+@sup.guide
+def transfer_internal(amount, accountone, accounttwo):
 
+	account = Person()
+	options = ["checking", "savings", "isa"]
 
+	if accountone not in options:
+		return sup.reprompt_error()
 
+	if accounttwo not in options:
+		return sup.reprompt_error()
 
+	msg1 = ""
+	msg2 = ""
+
+	for item in options:
+		if item == accountone:
+			old = getattr(account, item)
+			current = getattr(account, item) - amount
+			setattr(account, item, current)
+			msg1 = "Your %s before was %s. Now it is %s. " %(item, old, current)  
+
+		if item == accounttwo:
+			old = getattr(account, item)
+			current = getattr(account, item) + amount
+			setattr(account, item, current)
+			msg2 = " Your %s before was %s. Now it is %s " %(item, old, current)  
+
+	return statement(msg1 + msg2)
 
 
 #Add ability to query last months bills
@@ -215,13 +241,13 @@ class Person:
 		self.bankid = "12345"
 		self.passwd = "password123"
 		self.securityq = "December"
-
 		self.pin = "1234"
-
 		self.balance = 124000
 		self.postcode = "LS13EY"
 		self.address = "Calverley St, Leeds"
-
+		self.checking = 10000
+		self.savings = 5000
+		self.isa = 1000
 
 
 if __name__ == '__main__':
