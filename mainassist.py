@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_ask import Ask, statement, question , session
-
+import requests
+from geopy.geocoders import Nominatim
+import geopy.distance
+import datetime
 
 app =Flask(__name__)
 ask = Ask(app, "/")
@@ -49,8 +52,63 @@ def balance():
 	return statement("Your Account balance is ${}".format(Person().balance))
 
 
-#Add ability to query last months bills
+#@app.route('/test')
+@ask.intent('NearestLocation')
+def nearest_branch():
+	
+	geolocator = Nominatim()
+	location = geolocator.geocode(Person().address)
 
+	
+	userlong = location.longitude
+	userlat = location.latitude
+
+	url = "https://api.hsbc.com/x-open-banking/v1.2/branches/geo-location/lat/%s/long/%s" %(userlat, userlong)
+	respc = requests.get(url)
+
+	smallest = []
+	response = respc.json()
+
+	for store in response:
+		storelat = store['GeographicLocation']['Latitude']
+		storelong = store['GeographicLocation']['Longitude']
+
+		distance = geopy.distance.vincenty((userlat, userlong), (storelat,storelong))
+		smallest.append(distance)
+
+	print smallest
+	pos = smallest.index(min(smallest))
+	print pos
+
+	miles = smallest[pos].miles
+	objadd = response[pos]["Address"]
+
+	address = "%s %s %s, %s" %(objadd["BuildingNumberOrName"], objadd["StreetName"], \
+	 objadd["TownName"], objadd["PostCode"])
+
+	weekday = datetime.datetime.now().strftime("%A")
+	hours = response[pos]["OpeningTimes"]
+
+	opentime = '0AM'
+	closingtime = '0AM'
+
+	for hour in hours:
+		if str(hour["OpeningDay"]) == str(weekday):
+			opentime = hour["OpeningTime"]
+			closingtime = hour["ClosingTime"]
+
+
+	opentime = opentime[:-8]
+	closingtime = closingtime[:-8]
+	
+	msg = "Based on your location the closest store is %.2f miles away. The address is %s \
+	. The store hours for today are %s to %s " %(miles, address, opentime, closingtime)
+
+	return statement(msg)
+
+
+
+#Add ability to query last months bills
 #Class for information about user if needed
 class Person:
 	def __init__(self):
@@ -60,6 +118,8 @@ class Person:
 		self.passwd = "password123"
 		self.securityq = "December"
 		self.balance = 124000
+		self.postcode = "LS13EY"
+		self.address = "The School of Computing, Leeds"
 
 
 if __name__ == '__main__':
