@@ -4,3 +4,5 @@ lib/
 *.pyc
 .Python
 pip-selfcheck.json
+share/
+
