@@ -18,14 +18,15 @@ def start():
     return question(welcome_message)
 
 @ask.intent("YesIntent")
-def search():
-	return "Your balance is $120.00"
+def yes_intent():
+	return statement("Your balance is $120.00")
 
 @ask.intent("NoIntent")
 def no_intent():
-	return "I'm sorry to hear that."
+	return statement("I'm sorry to hear that.")
 
 
+#Add ability to query last months bills
 
 
 #Class for information about user if needed
@@ -36,7 +37,6 @@ class Person:
 		self.bankid = "12345"
 		self.passwd = "password123"
 		self.securityq = "December"
-
 
 
 if __name__ == '__main__':
