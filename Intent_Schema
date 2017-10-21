@@ -9,5 +9,10 @@
     {
       "intent": "AccountIntent"
     }
+
+    {
+      "intent": "LastTransaction"
+    }
+    
   ]
 }
