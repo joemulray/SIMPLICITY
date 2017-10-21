@@ -1,5 +1,4 @@
 requests
 flask
 flask_ask
-json
 unidecode
