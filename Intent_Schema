@@ -18,6 +18,9 @@
     },
     {
       "intent": "LastTransaction"
+    },
+    {
+      "intent": "NearestLocation"
     }
   ]
 }
