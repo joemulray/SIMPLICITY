@@ -23,6 +23,9 @@
     },
     {
       "intent": "BranchesNearby"
+    },
+    {
+      "intent" : "NearestATM"
     }
   ]
 }

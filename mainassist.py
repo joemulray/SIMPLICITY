@@ -78,7 +78,47 @@ def num_branches_nearby():
 	count = myfile.count("GeographicLocation")
 	return statement("There are %s branches within a mile." %count)
 
-#nearest branch
+
+@ask.intent('NearestATM')
+@sup.guide
+def nearest_atm():
+	geolocator = Nominatim()
+	location = geolocator.geocode(Person().address)
+	
+	userlong = location.longitude
+	userlat = location.latitude
+
+	url = "https://api.hsbc.com/x-open-banking/v1.2/atms/geo-location/lat/%s/long/%s" %(userlat, userlong)
+
+	respc = requests.get(url)
+	smallest = []
+	response = respc.json()
+
+	if not response:
+		return statement("Sorry, I could not find any ATM's near your address")
+
+	for atm in response:
+		atmlat = atm['GeographicLocation']['Latitude']
+		atmlong = atm['GeographicLocation']['Longitude']
+
+		distance = geopy.distance.vincenty((userlat, userlong), (atmlat,atmlong))
+		smallest.append(distance)
+
+	pos = smallest.index(min(smallest))
+
+	miles = smallest[pos].miles
+	objadd = response[pos]["Address"]
+
+	address = "%s %s, %s" %(objadd["StreetName"], \
+	objadd["TownName"], objadd["PostCode"])
+
+	msg = "Based on your location the closest ATM is %.2f miles away. The address is %s. \
+	" %(miles, address)
+
+	return statement(msg)
+	
+
+
 @ask.intent('NearestLocation')
 @sup.guide
 def nearest_branch():
@@ -96,7 +136,7 @@ def nearest_branch():
 	response = respc.json()
 
 	if not response:
-		return statement("Sorry, I could not find any stores near your address")
+		return statement("Sorry, I could not find any HSBC banks near your address")
 
 	for store in response:
 		storelat = store['GeographicLocation']['Latitude']
@@ -158,6 +198,7 @@ def PinCheck(PinNum):
 		return statement("pin correct. Logging in")
 	else:
 		return statement("Pin incorrect. returning to module selection")
+
 
 
 

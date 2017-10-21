@@ -25,24 +25,15 @@ steps:
       - "say: branch or balance"
     events:
     #choose path based on function triggered from intent
-      BranchSelected:
-        next: location_input
-      BalanceSelected:
-        next: pin_check
-
-  location_input:
-    reprompt:
-      - "Sorry, I didn't understand. \
-      For nearest branch location, please say. Find me the nearest bank. \
-      For the number of branches near you. \
-      say: how many banks are around"
-    help:
-      - "say: find me the nearest bank or. how many banks are around."
-    events:
       nearest_branch:
         next: done
+      nearest_atm:
+        next: done
+      BalanceSelected:
+        next: pin_check
       num_branches_nearby:
         next: done
+
 
   pin_check:
     reprompt:
