@@ -52,22 +52,24 @@ def balance():
 	return statement("Your Account balance is ${}".format(Person().balance))
 
 
-#@app.route('/test')
+# @app.route('/test')
 @ask.intent('NearestLocation')
 def nearest_branch():
 	
 	geolocator = Nominatim()
 	location = geolocator.geocode(Person().address)
-
 	
 	userlong = location.longitude
 	userlat = location.latitude
 
 	url = "https://api.hsbc.com/x-open-banking/v1.2/branches/geo-location/lat/%s/long/%s" %(userlat, userlong)
-	respc = requests.get(url)
 
+	respc = requests.get(url)
 	smallest = []
 	response = respc.json()
+
+	if not response:
+		return statement("Sorry, I could not find any stores near your address")
 
 	for store in response:
 		storelat = store['GeographicLocation']['Latitude']
@@ -76,9 +78,7 @@ def nearest_branch():
 		distance = geopy.distance.vincenty((userlat, userlong), (storelat,storelong))
 		smallest.append(distance)
 
-	print smallest
 	pos = smallest.index(min(smallest))
-	print pos
 
 	miles = smallest[pos].miles
 	objadd = response[pos]["Address"]
@@ -101,8 +101,8 @@ def nearest_branch():
 	opentime = opentime[:-8]
 	closingtime = closingtime[:-8]
 	
-	msg = "Based on your location the closest store is %.2f miles away. The address is %s \
-	. The store hours for today are %s to %s " %(miles, address, opentime, closingtime)
+	msg = "Based on your location the closest store is %.2f miles away. The address is %s. \
+	The store hours for today are %s to %s " %(miles, address, opentime, closingtime)
 
 	return statement(msg)
 
@@ -119,7 +119,7 @@ class Person:
 		self.securityq = "December"
 		self.balance = 124000
 		self.postcode = "LS13EY"
-		self.address = "The School of Computing, Leeds"
+		self.address = "Calverley St, Leeds"
 
 
 if __name__ == '__main__':
