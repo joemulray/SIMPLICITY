@@ -13,10 +13,6 @@ import urllib
 
 
 app =Flask("Bank")
-
-
-
-app =Flask(__name__)
 ask = Ask(app, "/")
 sup = Supervisor("scenario.yaml")
 

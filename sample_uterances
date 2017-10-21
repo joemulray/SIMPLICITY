@@ -1,19 +1,21 @@
-
-SelectBranchModule branch
-SelectBalanceModule balance
+SelectBalanceModule my balance
 InputPin {PinNum}
 
 BranchesNearby how many branches are around
+
 BranchesNearby how many banks are around
 BranchesNearby are there any banks nearby
 BranchesNearby are there any branches nearby
 
-NearestLocation what is the nearest bank
+
 NearestLocation find me the nearest bank
+
 NearestLocation I need to go to the bank
 NearestLocation find me a bank near me
+NearestLocation where is the nearest bank
+
+NearestATM I need an ATM
 
 NearestATM find me the nearest ATM
-NearestATM find me a ATM near me
 NearestATM where is the nearest ATM
 NearestATM I need to go to the ATM

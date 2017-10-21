@@ -18,11 +18,13 @@ steps:
     # if wrong intent was invoked, ask user again with one of the phrases (random choice)
     reprompt:
       - "Sorry, I didn't understand. \
-      To find a branch, say branch. \
-      To view your balance, say balance"
+      To view your balance, say. my balance. \
+      To find the nearest branch, say. find me the nearest bank. \
+      To find the nearest atm, say. I need and ATM. \
+      for how many branches are nearby, say. how many branches are around."
     # help phrases for the current step
     help:
-      - "say: branch or balance"
+      - "say: balance or find me the nearest bank or I need an ATM or how many branches are around"
     events:
     #choose path based on function triggered from intent
       nearest_branch:
