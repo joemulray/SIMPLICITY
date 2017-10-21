@@ -1,6 +1,13 @@
+
 SelectBranchModule branch
 SelectBalanceModule balance
 InputPin {PinNum}
+
+BranchesNearby how many branches are around
+BranchesNearby how many banks are around
+BranchesNearby are there any banks nearby
+BranchesNearby are there any branches nearby
+
 NearestLocation what is the nearest bank
 NearestLocation find me the nearest bank
 NearestLocation I need to go to the bank
