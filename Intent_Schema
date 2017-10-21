@@ -8,6 +8,13 @@
     },
     {
       "intent": "AccountIntent"
+    },
+     {
+      "intent": "PasswordLetterIntent",
+      "slots": [{
+        "name": "myNum",
+        "type": "AMAZON.NUMBER"
+      }]
     }
 
     {
