@@ -26,6 +26,11 @@ def no_intent():
 	return statement("I'm sorry to hear that.")
 
 
+@ask.intent("LastTransaction")
+def last_transaction():
+	return statement("Your last transaction was $3.95 at Starbucks on Saturday mornning.")
+
+
 @ask.intent("PasswordIntent")
 
 def passwordCheck():
