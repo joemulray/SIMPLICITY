@@ -26,6 +26,22 @@ def no_intent():
 	return statement("I'm sorry to hear that.")
 
 
+@ask.intent("PasswordIntent")
+
+def passwordCheck():
+
+	user = Person()
+	password = user.passwd
+
+	pwLength = len(password)
+
+	return question("your password is" + password)
+
+
+@ask.intent("PasswordLetterIntent", convert={"myNum":int})
+def numbers(myNum):
+	return statement("number is {}".format(myNum))
+
 #Add ability to query last months bills
 
 
