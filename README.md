@@ -33,3 +33,31 @@ python mainassist.py
 * Put all the needed information in Amazon Dev account in Alexa Skill (All neccecities inside git repo)
 * [Amazon Echo Skill Testing Tool](https://echosim.io/)
 * Enjoy :)
+
+
+### Usage
+* Follow the instructions returned via alexa to navigate app features
+
+
+### Features
+* Scenario based conversation -> can not call functions that are outside the context of current conversation
+* Smart identity confirmation -> asks for random number positions of a pin (just like signing in online banking)
+* Broad range of functions:
+    * Nearest branch
+    * Number of nearby branches
+    * Nearest ATM
+    * Check account balance
+    * Transfer between accounts
+
+
+### Limitations
+* Dependent on Alexa voice recognition software
+    * Function calling phrases may be similar to default Alexa phrases, thus may result in incorrect redirections
+    * Voice to text is not 100% accurate. This will break out of the scenario path
+    * May have security issues -> do not know how voice data is transferred to backend (encryption)
+
+
+### Acknoledgement
+* Flask-Ask library to enable Alexa to python connection
+* Alexa Flask-ASK Guide library as addon to Flask-Ask to allow scenario based conversations
+* Echosim.io for Alexa emulation during testing

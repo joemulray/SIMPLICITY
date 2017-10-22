@@ -8,5 +8,5 @@ account_welcome: "Welcome to account management. to view balance, say: view bala
 
 transfer_welcome: "Welcome to transfer. to transfer funds, say: transfer, number, from, first account name, to, second account name."
 
-balance_welcome: "Welcome to balance. to view balance, say: show, account name, account balance."
+balance_welcome: "Welcome to balance. to view balance, say: view, account name, account balance."
 

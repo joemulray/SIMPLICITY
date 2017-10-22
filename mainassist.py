@@ -8,7 +8,7 @@ from geopy.geocoders import Nominatim
 import geopy.distance
 import datetime
 from afg import Supervisor
-from random import randint
+import random
 import urllib
 
 
@@ -33,35 +33,77 @@ AccountTypes = [
 ]
 
 
+#functions for security checks at login
+#reset number of tries
+def PinCheckReset():
+	session.attributes["PinCorrectTotal"] = 0
+	session.attributes["PinIncorrectTotal"] = 0
+#remove position from rand position generator list after position has been generated
+def PinRemoveCurrentPosition():
+	session.attributes["AllowedValues"].remove(session.attributes["PinPosition"])
+#generate current pin position for the user to input
+def PinGenPosition():
+	session.attributes["PinPosition"] = random.choice(session.attributes["AllowedValues"])
+#convert number to word using nth dictionary e.g. "0" -> "first"
+def PinGetMsg():
+	return nth[session.attributes["PinPosition"]]
+#increase correct entry total by 1 after successful entry
+def PinTotalAdd():
+	session.attributes["PinCorrectTotal"] += 1
+#increase incorrect entry by 1 after unsuccessful entry
+def PinTotalSub():
+	session.attributes["PinIncorrectTotal"] += 1
+#operation looper controls
+def ResetLooperSelector():
+	session.attributes["LooperSelector"] = 0
+
+
+
+#initialise session start and end functions etc.
+#very important
 @ask.on_session_started
 @sup.start
 def new_session():
-    app.logger.debug('new session started')
-
+	#initiate looperselector for later operations
+	ResetLooperSelector()
+	app.logger.debug('new session started')
 
 @sup.stop
 def close_user_session():
     logger.debug("user session stopped")
 
-
 @ask.session_ended
 def session_ended():
     close_user_session()
     return "", 200
-
+#initialise help function (user says "Help" during anytime inside main route for help message)
 @ask.intent('AMAZON.HelpIntent')
 def help_user():
     context_help = sup.get_help()
     # context_help string could be extended with some dynamic information
     return question(context_help)
 
-#start module after calling skill
+
+#Start scenario after skill calling
 @ask.launch
 @sup.guide
 def launched():
-    return question(render_template("welcome"))
+	return question(render_template("welcome"))
+#initiate looping functions (empty functions that gets called to trigger difference routes in scenario.yaml)
+#holy shit loops!!!
+@sup.guide
+def NoMoveOn():
+	print "do not move on"
 
+@sup.guide
+def MoveOn():
+	print "move on"
 
+@sup.guide
+def LockAccount():
+	print "fraud? account locked"
+
+#Layer 1 of scenario
 #number of nearby branches
 @ask.intent("BranchesNearby")
 def num_branches_nearby():
@@ -74,7 +116,7 @@ def num_branches_nearby():
 	count = myfile.count("GeographicLocation")
 	return statement("There are %s branches within a mile." %count)
 
-
+#nearest ATM
 @ask.intent('NearestATM')
 @sup.guide
 def nearest_atm():
@@ -113,8 +155,7 @@ def nearest_atm():
 
 	return statement(msg)
 	
-
-
+#Nearest branch
 @ask.intent('NearestLocation')
 @sup.guide
 def nearest_branch():
@@ -169,32 +210,63 @@ def nearest_branch():
 
 	return statement(msg)
 
-
+#Id check for bank account operations
 @ask.intent("LoginModule")
 @sup.guide
 def LoginSelected():
 	user = Person()
 
-	session.attributes["PinPosition"] = randint(0, len(user.pin)-1)
-	positionToMsg = nth[session.attributes["PinPosition"]]
+	PinCheckReset()
+	session.attributes["AllowedValues"] = list(range(len(user.pin)))
+
+	PinGenPosition()
+	PinRemoveCurrentPosition()
+	positionToMsg = PinGetMsg()
 
 
 	return question("Please say the " + positionToMsg + " number of your pin.")
 
+
+#layer 2 of scenario
+#id checking with pin check loop
 @ask.intent("InputPin", convert={"PinNum":int})
 @sup.guide
 def PinCheck(PinNum):
+	#ignore any none single digit entries
 	if PinNum not in [0,1,2,3,4,5,6,7,8,9]:
 		return sup.reprompt_error()
-
+	#find correct pin for the current position
 	user = Person()
 	correctPin = user.pin[session.attributes["PinPosition"]]
-
+	#checks with input
+	#proceed to next layer for three times correct
+	#lock account for three times incorrect
 	if (PinNum == int(correctPin)):
-		return question(render_template("account_welcome"))
+		PinTotalAdd()
+		if (session.attributes["PinCorrectTotal"] >= 3):
+			MoveOn()
+			PinCheckReset()
+			return question(render_template("account_welcome"))
+		else:
+			NoMoveOn()
+			PinGenPosition()
+			PinRemoveCurrentPosition()
+			msg = PinGetMsg()
+			return question("Pin correct. Please say the " + msg + " number of your pin.")
 	else:
-		return statement("Pin incorrect. returning to module selection")
+		PinTotalSub()
+		if (session.attributes["PinIncorrectTotal"] >= 3):
+			LockAccount()
+			PinCheckReset()
+			return statement("Too many incorrect entries. account locked.")
+		else:
+			NoMoveOn()
+			msg = PinGetMsg()
+			return question("Pin incorrect. please say the " + msg + " number of your pin.")
 
+
+#layer 3 account operations hub
+#hub functions to explain how to initiate each type of operation
 @ask.intent("TransferExplaination")
 @sup.guide
 def TransferExplain():
@@ -206,6 +278,8 @@ def BalanceExplain():
 	return question(render_template("balance_welcome"))
 
 
+#layer 4 actual account operations
+#show account balance
 @ask.intent("ViewBalance", convert={"accountToView":"ACCOUNT"})
 @sup.guide
 def ViewBalance(accountToView):
@@ -216,10 +290,10 @@ def ViewBalance(accountToView):
 	for item in AccountTypes:
 		if item == accountToView:
 			accountBalance = getattr(account, item)
-			return statement("Your %s account balance is: %s pounds" %(item, accountBalance))
+			session.attributes["LooperSelector"] = 2
+			return question("Your %s account balance is: %s pounds. Would you like to view another account balance?" %(item, accountBalance))
 
-
-
+#transfer between accounts
 @ask.intent("TransferIntent", convert={"amount":int, "accountone": "ACCOUNT", "accounttwo": "ACCOUNT"})
 @sup.guide
 def transfer_internal(amount, accountone, accounttwo):
@@ -240,7 +314,8 @@ def transfer_internal(amount, accountone, accounttwo):
 			old = getattr(account, item)
 			current = getattr(account, item) - amount
 			if (current < 0):
-				return statement("not enough funds in %s for transfer" %(item))
+				session.attributes["LooperSelector"] = 1
+				return question("not enough funds in %s for transfer. Would you like to make another transfer?" %(item))
 			else:
 				setattr(account, item, current)
 				msg1 = "Your %s before was %s. Now it is %s. " %(item, old, current)  
@@ -249,13 +324,37 @@ def transfer_internal(amount, accountone, accounttwo):
 			old = getattr(account, item)
 			current = getattr(account, item) + amount
 			setattr(account, item, current)
-			msg2 = " Your %s before was %s. Now it is %s " %(item, old, current)  
+			msg2 = " Your %s before was %s. Now it is %s. " %(item, old, current)  
+	session.attributes["LooperSelector"] = 1
+	return question(msg1 + msg2 + "Would you like to make another transfer?")
 
-	return statement(msg1 + msg2)
+@ask.intent("AMAZON.YesIntent")
+@sup.guide
+def OperationLoop():
+	if (session.attributes["LooperSelector"] == 1):
+		RepeatTransfer()
+		ResetLooperSelector()
+		return question(render_template("transfer_welcome"))
+	elif (session.attributes["LooperSelector"] == 2):
+		RepeatBalance()
+		ResetLooperSelector()
+		return question(render_template("balance_welcome"))
+	else:
+		return statement("looper broken, please contact system admin.")
 
+@ask.intent("AMAZON.NoIntent")
+@sup.guide
+def NoLoop():
+	return statement("thank you for using hsbc service.")
 
-#Add ability to query last months bills
-#Class for information about user if needed
+@sup.guide
+def RepeatTransfer():
+	print "repeating transfer"
+
+@sup.guide
+def RepeatBalance():
+	print "repeating balance"
+#stub class for user info
 class Person:
 	def __init__(self):
 		self.name = "User1"

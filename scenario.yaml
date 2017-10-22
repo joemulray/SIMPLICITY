@@ -26,7 +26,7 @@ steps:
     help:
       - "say: account or find me the nearest bank or I need an ATM or how many branches are around"
     events:
-    #choose path based on function triggered from intent
+    #choose path based on function triggered from python file
       nearest_branch:
         next: done
       nearest_atm:
@@ -36,7 +36,6 @@ steps:
       num_branches_nearby:
         next: done
 
-
   pin_check:
     reprompt:
       - "Sorry, I didn't understand. please say a number."
@@ -45,7 +44,21 @@ steps:
 
     events:
       PinCheck:
+        next: pin_move_on
+
+  #pin looping module, loop back to certain sections depending on which empty function is called
+  pin_move_on:
+    reprompt:
+      - ""
+    help:
+      - ""
+    events:
+      NoMoveOn:
+        next: pin_check
+      MoveOn:
         next: account_operation
+      LockAccount:
+        next: done
 
   account_operation:
     reprompt:
@@ -67,7 +80,7 @@ steps:
 
     events:
       transfer_internal:
-        next: done
+        next: repeat_operation
 
   balance:
     reprompt:
@@ -77,7 +90,29 @@ steps:
 
     events:
       ViewBalance:
+        next: repeat_operation
+
+  repeat_operation:
+    reprompt:
+      - "Sorry, I didn't understand. Please say yes or no."
+    help:
+      - "say: yes or no"
+    events:
+      OperationLoop:
+        next: where_to_loop
+      NoLoop:
         next: done
+
+  where_to_loop:
+    reprompt:
+      - ""
+    help:
+      - ""
+    events:
+      RepeatTransfer:
+        next: transfer
+      RepeatBalance:
+        next: balance
 
   
 
