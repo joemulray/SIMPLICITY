@@ -354,7 +354,8 @@ def RepeatTransfer():
   
 @sup.guide
 def RepeatBalance():
-
+	print "repeat balance"
+	
 #stop and cancel commands to cancel anything
 @ask.intent('AMAZON.StopIntent')
 def stop():
