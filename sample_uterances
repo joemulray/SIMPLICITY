@@ -2,6 +2,7 @@ LoginModule my account
 InputPin {PinNum}
 TransferExplaination transfer funds
 BalanceExplaination view balance
+ViewBalance show {accountToView} account balance
 
 BranchesNearby how many branches are around
 

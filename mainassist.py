@@ -25,6 +25,12 @@ nth = {
 	2: "third",
 	3: "fourth"
 }
+#initialise account types for checks in transfer, balance and pay modules
+AccountTypes = [
+	"savings",
+	"checking",
+	"isa"
+]
 
 
 @ask.on_session_started
@@ -200,23 +206,36 @@ def BalanceExplain():
 	return question(render_template("balance_welcome"))
 
 
+@ask.intent("ViewBalance", convert={"accountToView":"ACCOUNT"})
+@sup.guide
+def ViewBalance(accountToView):
+	if accountToView not in AccountTypes:
+		return sup.reprompt_error()
+
+	account = Person()
+	for item in AccountTypes:
+		if item == accountToView:
+			accountBalance = getattr(account, item)
+			return statement("Your %s account balance is: %s pounds" %(item, accountBalance))
+
+
+
 @ask.intent("TransferIntent", convert={"amount":int, "accountone": "ACCOUNT", "accounttwo": "ACCOUNT"})
 @sup.guide
 def transfer_internal(amount, accountone, accounttwo):
 
 	account = Person()
-	options = ["checking", "savings", "isa"]
 
-	if accountone not in options:
+	if accountone not in AccountTypes:
 		return sup.reprompt_error()
 
-	if accounttwo not in options:
+	if accounttwo not in AccountTypes:
 		return sup.reprompt_error()
 
 	msg1 = ""
 	msg2 = ""
 
-	for item in options:
+	for item in AccountTypes:
 		if item == accountone:
 			old = getattr(account, item)
 			current = getattr(account, item) - amount
