@@ -164,8 +164,8 @@ def nearest_branch():
 	opentime = opentime[:-8]
 	closingtime = closingtime[:-8]
 	
-	msg = "Based on your location the closest store is %.2f miles away. The address is %s. \
-	The store hours for today are %s to %s " %(miles, address, opentime, closingtime)
+	msg = "Based on your location the closest HSBC bank is %.2f miles away. The address is %s. \
+	The bank hours for today are %s to %s " %(miles, address, opentime, closingtime)
 
 	return statement(msg)
 
