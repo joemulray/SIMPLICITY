@@ -55,12 +55,6 @@ def help_user():
 def launched():
     return question(render_template("welcome"))
 
-#select branch module
-@ask.intent("SelectBranchModule")
-@sup.guide
-def BranchSelected():
-	return question(render_template("branch_welcome"))
-
 
 #number of nearby branches
 @ask.intent("BranchesNearby")
@@ -170,9 +164,9 @@ def nearest_branch():
 	return statement(msg)
 
 
-@ask.intent("SelectBalanceModule")
+@ask.intent("LoginModule")
 @sup.guide
-def BalanceSelected():
+def LoginSelected():
 	user = Person()
 
 	session.attributes["PinPosition"] = randint(0, len(user.pin)-1)
@@ -191,9 +185,19 @@ def PinCheck(PinNum):
 	correctPin = user.pin[session.attributes["PinPosition"]]
 
 	if (PinNum == int(correctPin)):
-		return question("pin correct. Logging in. Please say your transfer. ")
+		return question(render_template("account_welcome"))
 	else:
 		return statement("Pin incorrect. returning to module selection")
+
+@ask.intent("TransferExplaination")
+@sup.guide
+def TransferExplain():
+	return question(render_template("transfer_welcome"))
+
+@ask.intent("BalanceExplaination")
+@sup.guide
+def BalanceExplain():
+	return question(render_template("balance_welcome"))
 
 
 @ask.intent("TransferIntent", convert={"amount":int, "accountone": "ACCOUNT", "accounttwo": "ACCOUNT"})
@@ -216,8 +220,11 @@ def transfer_internal(amount, accountone, accounttwo):
 		if item == accountone:
 			old = getattr(account, item)
 			current = getattr(account, item) - amount
-			setattr(account, item, current)
-			msg1 = "Your %s before was %s. Now it is %s. " %(item, old, current)  
+			if (current < 0):
+				return statement("not enough funds in %s for transfer" %(item))
+			else:
+				setattr(account, item, current)
+				msg1 = "Your %s before was %s. Now it is %s. " %(item, old, current)  
 
 		if item == accounttwo:
 			old = getattr(account, item)
