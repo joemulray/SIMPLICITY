@@ -21,5 +21,6 @@ NearestATM I need an ATM
 NearestATM find me the nearest ATM
 NearestATM where is the nearest ATM
 NearestATM I need to go to the ATM
+NearestATM I really need an ATM
 
 TransferIntent Transfer {amount} from {accountone} to {accounttwo}
