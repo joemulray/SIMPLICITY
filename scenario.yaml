@@ -18,20 +18,20 @@ steps:
     # if wrong intent was invoked, ask user again with one of the phrases (random choice)
     reprompt:
       - "Sorry, I didn't understand. \
-      To view your balance, say. my balance. \
-      To find the nearest branch, say. find me the nearest bank. \
-      To find the nearest atm, say. I need and ATM. \
-      for how many branches are nearby, say. how many branches are around."
+      For account managment, say: my account. \
+      To find the nearest branch, say: find me the nearest bank. \
+      To find the nearest atm, say: I need and ATM. \
+      for how many branches are nearby, say: how many branches are around."
     # help phrases for the current step
     help:
-      - "say: balance or find me the nearest bank or I need an ATM or how many branches are around"
+      - "say: account or find me the nearest bank or I need an ATM or how many branches are around"
     events:
     #choose path based on function triggered from intent
       nearest_branch:
         next: done
       nearest_atm:
         next: done
-      BalanceSelected:
+      LoginSelected:
         next: pin_check
       num_branches_nearby:
         next: done
@@ -45,9 +45,20 @@ steps:
 
     events:
       PinCheck:
+        next: account_operation
+
+  account_operation:
+    reprompt:
+      - "Sorry, I didn't understand. please say: transfer funds or view balance"
+    help:
+      - "say: transfer funds or view balance"
+
+    events:
+      TransferExplain:
         next: transfer
-
-
+      BalanceExplain:
+        next: done
+        
   transfer:
     reprompt:
       - "Sorry I could not find the account, please try again."
@@ -57,6 +68,8 @@ steps:
     events:
       transfer_internal:
         next: done
+
+  
 
 # no need to describe last step
   done:

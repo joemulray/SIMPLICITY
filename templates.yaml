@@ -1,7 +1,12 @@
-
 welcome: "Hello there, Welcome to the HSBC Alexa App. \
-To view your balance, say. my balance. \
-To find the nearest branch, say. find me the nearest bank. \
-To find the nearest atm, say. I need an ATM. \
-for how many branches are nearby, say. how many branches are around."
+For account operations, say: my account. \
+To find the nearest branch, say: find me the nearest bank. \
+To find the nearest atm, say: I need an ATM. \
+for how many branches are nearby, say: how many branches are around."
+
+account_welcome: "Welcome to account management. to view balance, say: view balance. for transfers, say: transfer funds."
+
+transfer_welcome: "Welcome to transfer. to transfer funds, say: transfer, number, from, first account name, to, second account name."
+
+balance_welcome: "Welcome to balance. to view balance, say: show, account name, account balance."
 
