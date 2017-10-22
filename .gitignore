@@ -5,4 +5,4 @@ lib/
 .Python
 pip-selfcheck.json
 share/
-
+local/
