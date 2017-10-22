@@ -1,5 +1,7 @@
-SelectBalanceModule my balance
+LoginModule my account
 InputPin {PinNum}
+TransferExplaination transfer funds
+BalanceExplaination view balance
 
 BranchesNearby how many branches are around
 

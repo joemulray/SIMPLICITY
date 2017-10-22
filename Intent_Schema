@@ -7,7 +7,13 @@
       "intent": "NearestLocation"
     },
     {
-      "intent": "SelectBalanceModule"
+      "intent": "LoginModule"
+    },
+    {
+      "intent": "TransferExplaination"
+    },
+    {
+      "intent": "BalanceExplaination"
     },
     {
       "intent": "InputPin",
@@ -22,11 +28,11 @@
       "intent": "BranchesNearby"
     },
     {
-      "intent" : "NearestATM"
+      "intent": "NearestATM"
     },
     {
-      "intent" : "TransferIntent",
-      "slots" : [
+      "intent": "TransferIntent",
+      "slots": [
         {
           "name": "accountone",
           "type": "ACCOUNT"
