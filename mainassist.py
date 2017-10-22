@@ -41,7 +41,7 @@ def new_session():
 
 @sup.stop
 def close_user_session():
-    logger.debug("user session stopped")
+    app.logger.debug("user session stopped")
 
 
 @ask.session_ended
@@ -252,6 +252,17 @@ def transfer_internal(amount, accountone, accounttwo):
 			msg2 = " Your %s before was %s. Now it is %s " %(item, old, current)  
 
 	return statement(msg1 + msg2)
+
+@ask.intent('AMAZON.StopIntent')
+def stop():
+    #close_user_session()
+    return statement(render_template('stop'))
+
+@ask.intent('AMAZON.CancelIntent')
+def cancel():
+	#close_user_session()
+	return statement(render_template('cancel'))
+
 
 
 #Add ability to query last months bills

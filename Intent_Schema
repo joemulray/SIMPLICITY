@@ -55,6 +55,13 @@
           "type": "AMAZON.NUMBER"
         }
       ]
+    },
+    {
+
+      "intent" : "AMAZON.CancelIntent"
+    },
+    {
+      "intent" : "AMAZON.StopIntent"
     }
   ]
 }

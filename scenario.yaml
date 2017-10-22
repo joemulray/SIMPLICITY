@@ -58,7 +58,7 @@ steps:
         next: transfer
       BalanceExplain:
         next: balance
-        
+
   transfer:
     reprompt:
       - "Sorry, I could not find the account, please try again."
@@ -79,7 +79,7 @@ steps:
       ViewBalance:
         next: done
 
-  
+
 
 # no need to describe last step
   done:
