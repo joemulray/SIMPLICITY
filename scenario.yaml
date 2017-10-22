@@ -71,7 +71,7 @@ steps:
         next: transfer
       BalanceExplain:
         next: balance
-        
+
   transfer:
     reprompt:
       - "Sorry, I could not find the account, please try again."
@@ -103,6 +103,7 @@ steps:
       NoLoop:
         next: done
 
+
   where_to_loop:
     reprompt:
       - ""
@@ -113,8 +114,6 @@ steps:
         next: transfer
       RepeatBalance:
         next: balance
-
-  
 
 # no need to describe last step
   done:

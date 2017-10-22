@@ -70,7 +70,7 @@ def new_session():
 
 @sup.stop
 def close_user_session():
-    logger.debug("user session stopped")
+    app.logger.debug("user session stopped")
 
 @ask.session_ended
 def session_ended():
@@ -347,13 +347,27 @@ def OperationLoop():
 def NoLoop():
 	return statement("thank you for using hsbc service.")
 
+
 @sup.guide
 def RepeatTransfer():
 	print "repeating transfer"
-
+  
 @sup.guide
 def RepeatBalance():
-	print "repeating balance"
+
+#stop and cancel commands to cancel anything
+@ask.intent('AMAZON.StopIntent')
+def stop():
+    #close_user_session()
+    return statement(render_template('stop'))
+
+@ask.intent('AMAZON.CancelIntent')
+def cancel():
+	#close_user_session()
+	return statement(render_template('cancel'))
+
+
+
 #stub class for user info
 class Person:
 	def __init__(self):

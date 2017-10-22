@@ -10,3 +10,6 @@ transfer_welcome: "Welcome to transfer. to transfer funds, say: transfer, number
 
 balance_welcome: "Welcome to balance. to view balance, say: view, account name, account balance."
 
+cancel: "You have left the banking application. Please use our services again."
+
+stop: "You have stopped the banking application. We hope you use our services again."
