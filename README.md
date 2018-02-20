@@ -26,6 +26,9 @@ source bin/activate
 pip install -r requirements.txt
 python mainassist.py
 
+#Default port 5000 for flask environment
+#In new shell, start ngrok service on same port as flask
+ngrok http <port>
 ```
 
 ### Instructions
