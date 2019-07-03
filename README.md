@@ -1,10 +1,11 @@
-<a href="https://www.buymeacoffee.com/mulrex" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
 # SIMPLICITY
 FinTech Hackathon
 
 Integration of digital banking with personal assistant technology :thumbsup:
  
+ [![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/0)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/0)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/1)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/1)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/2)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/2)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/3)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/3)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/4)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/4)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/5)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/5)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/6)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/6)[![](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/images/7)](https://sourcerer.io/fame/joemulray/joemulray/SIMPLICITY/links/7)
+
+<a href="https://www.buymeacoffee.com/mulrex" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
 ### Prerequisites
 * virtualenv
