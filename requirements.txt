@@ -7,7 +7,7 @@ chardet==3.0.4
 click==6.7
 cryptography==2.3
 enum34==1.1.6
-Flask==0.12.1
+Flask==1.0
 Flask-Ask==0.9.7
 fysom==2.1.5
 geopy==1.11.0
